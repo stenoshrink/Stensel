@@ -13,9 +13,9 @@ namespace Stensel
     {
         private IMidiOutPort midiOutPort;
         private Stopwatch stopwatch = new Stopwatch();
-        private long noteOpenTime = 20;
+        private long noteOpenTime = 10;
         private DispatcherTimer dispatcher = new DispatcherTimer();
-        private Queue<byte> transmitted = new Queue<byte>();
+        private Queue<byte[]> transmitted = new Queue<byte[]>();
 
         public MIDITransmitter(IMidiOutPort midiOutPort)
         {
@@ -30,19 +30,30 @@ namespace Stensel
             foreach(byte note in notes)
             {
                 midiOutPort.SendMessage(new MidiNoteOnMessage(0, note, 127));
-                transmitted.Enqueue(note);
             }
 
-            stopwatch.Restart();
+            transmitted.Enqueue(notes);
         }
 
         private void SendNotesOff(object sender, object e)
         {
-            if(stopwatch.ElapsedMilliseconds > noteOpenTime)
+            if(transmitted.Count > 0)
             {
-                stopwatch.Stop();
-                while (transmitted.Count > 0)
-                    midiOutPort.SendMessage(new MidiNoteOffMessage(0, transmitted.Dequeue(), 127));
+                if (stopwatch.ElapsedMilliseconds > noteOpenTime)
+                {
+                    byte[] notes = transmitted.Dequeue();
+                    foreach (byte note in notes)
+                        midiOutPort.SendMessage(new MidiNoteOffMessage(0, note, 127));
+
+                    if (transmitted.Count == 0)
+                        stopwatch.Stop();
+                    else
+                        stopwatch.Restart();
+                }
+                else if (!stopwatch.IsRunning)
+                {
+                    stopwatch.Restart();
+                }
             }
         }
     }
