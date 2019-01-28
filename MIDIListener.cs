@@ -130,7 +130,7 @@ namespace Stensel
         }
 
         private static bool debouncing = false;
-        private static readonly long debounce = 40;
+        private static readonly long debounce = 20;
         private static Stopwatch debounceTimer = new Stopwatch();
 
         private void BeginDebounce()
