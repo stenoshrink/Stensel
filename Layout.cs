@@ -37,20 +37,20 @@ namespace Stensel
         public async Task<LayoutKey[]> LoadLayout()
         {
             StorageFolder sfold = ApplicationData.Current.LocalFolder;
-            StorageFile sf = (StorageFile) await sfold.TryGetItemAsync("Stenotype.txt");
+            StorageFile sf = (StorageFile) await sfold.TryGetItemAsync("Sonotype.txt");
 
             if (sf == null)
             {
                 // Copy the file from the install folder to the local folder
                 var folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
 
-                var file = await folder.GetFileAsync("Stenotype.txt");
+                var file = await folder.GetFileAsync("Sonotype.txt");
                 if (file != null)
                 {
-                    await file.CopyAsync(sfold, "Stenotype.txt", NameCollisionOption.FailIfExists);
+                    await file.CopyAsync(sfold, "Sonotype.txt", NameCollisionOption.FailIfExists);
                 }
 
-                sf = await sfold.GetFileAsync("Stenotype.txt");
+                sf = await sfold.GetFileAsync("Sonotype.txt");
             }
 
 
