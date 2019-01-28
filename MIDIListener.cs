@@ -181,9 +181,9 @@ namespace Stensel
             if (openControlRecords.Count < 1 && openDownRecords.Count < 1)
                 return null;
 
-            List<ChannelRecord> records = new List<ChannelRecord>(openControlRecords.Values);
+            List<ChannelRecord> records = new List<ChannelRecord>(openDownRecords.Values);
 
-            records.AddRange(openDownRecords.Values);
+            records.AddRange(openControlRecords.Values);
 
             ChannelRecord[] safe = records.ToArray();
             List<ChannelRecord> copy = new List<ChannelRecord>();
